@@ -1,0 +1,57 @@
+{
+  "template": "https://github.com/lkubb/salt-template-formula-compose",
+  "commit": "7c15b4ed8e4a1a140324cff2bb17b0fa743494bc",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "_extensions": [
+        "local_extensions.YAMLDumper"
+      ],
+      "_jinja2_env_vars": {
+        "block_start_string": "{!",
+        "block_end_string": "!}",
+        "variable_start_string": "{=",
+        "variable_end_string": "=}",
+        "comment_start_string": "{@",
+        "comment_end_string": "@}"
+      },
+      "name": "Miniflux",
+      "abbr": "miniflux",
+      "abbr_pysafe": "miniflux",
+      "project_name": "miniflux",
+      "containers": "miniflux,postgres",
+      "git_username": "lkubb",
+      "_lookup": {
+        "containers": {
+          "miniflux": {
+            "image": "ghcr.io/miniflux/miniflux:latest"
+          },
+          "postgres": {
+            "image": "docker.io/library/postgres:latest"
+          }
+        },
+        "paths": {
+          "db": "data"
+        }
+      },
+      "_settings": {
+        "config": {
+          "admin_password": "correct horse battery staple",
+          "admin_username": "admin",
+          "create_admin": true,
+          "database": {
+            "user": "miniflux",
+            "password": null,
+            "dbname": "miniflux",
+            "host": "db",
+            "sslmode": "disable"
+          },
+          "port": 1855,
+          "run_migrations": true
+        }
+      },
+      "_template": "https://github.com/lkubb/salt-template-formula-compose"
+    }
+  },
+  "directory": null
+}

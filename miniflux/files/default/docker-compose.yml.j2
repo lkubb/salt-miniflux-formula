@@ -1,0 +1,32 @@
+version: '3.4'
+services:
+  miniflux:
+    image: {{ miniflux.lookup.containers.miniflux.image }}
+    ports:
+      - "{{ miniflux.config.port }}:{{ miniflux.config.port }}"
+    depends_on:
+      db:
+        condition: service_healthy
+    # miniflux tries to connect once and then exits,
+    # podman/podman-compose do not support depends_on condition properly
+    # this makes sure the db can be reached before starting miniflux
+    command: sh -c 'until nc -z db 5432; do sleep 1; done; exec /usr/bin/miniflux'
+    env_file:
+      - {{ miniflux.lookup.paths.config_miniflux }}
+    healthcheck:
+      test: ["CMD", "/usr/bin/miniflux", "-healthcheck", "auto"]
+  db:
+    image: {{ miniflux.lookup.containers.postgres.image }}
+    env_file:
+      - {{ miniflux.lookup.paths.config_postgres }}
+    volumes:
+      - {{ miniflux.lookup.paths.db or "miniflux-db" }}:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "{{ miniflux.config.database.user }}"]
+      interval: 10s
+      start_period: 30s
+{%- if not miniflux.lookup.paths.db %}
+
+volumes:
+  miniflux-db:
+{%- endif %}

@@ -1,0 +1,56 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+#
+# Set default values.
+---
+values:
+  lookup:
+    rootgroup: root
+    compose:
+      create_pod: null
+      pod_args: null
+      project_name: miniflux
+      remove_orphans: true
+      service:
+        container_prefix: null
+        ephemeral: true
+        pod_prefix: null
+        restart_policy: on-failure
+        separator: null
+        stop_timeout: null
+    paths:
+      base: /opt/containers/miniflux
+      compose: docker-compose.yml
+      config_miniflux: miniflux.env
+      config_postgres: postgres.env
+      db: data
+    user:
+      groups: []
+      home: null
+      name: miniflux
+      shell: /usr/sbin/nologin
+      uid: null
+    containers:
+      miniflux:
+        image: ghcr.io/miniflux/miniflux:latest
+      postgres:
+        image: docker.io/library/postgres:latest
+  install:
+    rootless: true
+    remove_all_data_for_sure: false
+  config:
+    admin_password: correct horse battery staple
+    admin_username: admin
+    create_admin: true
+    database:
+      dbname: miniflux
+      host: db
+      password: null
+      sslmode: disable
+      user: miniflux
+    port: 1855
+    run_migrations: true
+  # Just here for testing
+  added_in_defaults: defaults_value
+  winner: defaults
+...
