@@ -22,6 +22,8 @@ Miniflux user session is initialized at boot:
   compose.lingering_managed:
     - name: {{ miniflux.lookup.user.name }}
     - enable: {{ miniflux.install.rootless }}
+    - require:
+      - user: {{ miniflux.lookup.user.name }}
 
 Miniflux paths are present:
   file.directory:
