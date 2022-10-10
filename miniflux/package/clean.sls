@@ -8,6 +8,18 @@
 include:
   - {{ sls_config_clean }}
 
+{%- if miniflux.install.autoupdate_service %}
+
+Podman autoupdate service is disabled for Miniflux:
+{%-   if miniflux.install.rootless %}
+  compose.systemd_service_disabled:
+    - user: {{ miniflux.lookup.user.name }}
+{%-   else %}
+  service.disabled:
+{%-   endif %}
+    - name: podman-auto-update.timer
+{%- endif %}
+
 Miniflux is absent:
   compose.removed:
     - name: {{ miniflux.lookup.paths.compose }}

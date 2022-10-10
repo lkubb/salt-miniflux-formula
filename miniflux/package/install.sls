@@ -71,3 +71,15 @@ Miniflux is installed:
     - require:
       - user: {{ miniflux.lookup.user.name }}
 {%- endif %}
+
+{%- if miniflux.install.autoupdate_service is not none %}
+
+Podman autoupdate service is managed for Miniflux:
+{%-   if miniflux.install.rootless %}
+  compose.systemd_service_{{ "enabled" if miniflux.install.autoupdate_service else "disabled" }}:
+    - user: {{ miniflux.lookup.user.name }}
+{%-   else %}
+  service.{{ "enabled" if miniflux.install.autoupdate_service else "disabled" }}:
+{%-   endif %}
+    - name: podman-auto-update.timer
+{%- endif %}

@@ -13,12 +13,20 @@ services:
     command: sh -c 'until nc -z db 5432; do sleep 1; done; exec /usr/bin/miniflux'
     env_file:
       - {{ miniflux.lookup.paths.config_miniflux }}
+{%- if miniflux.install.autoupdate %}
+    labels:
+      - io.containers.autoupdate=registry
+{%- endif %}
     healthcheck:
       test: ["CMD", "/usr/bin/miniflux", "-healthcheck", "auto"]
   db:
     image: {{ miniflux.lookup.containers.postgres.image }}
     env_file:
       - {{ miniflux.lookup.paths.config_postgres }}
+{%- if miniflux.install.autoupdate %}
+    labels:
+      - io.containers.autoupdate=registry
+{%- endif %}
     volumes:
       - {{ miniflux.lookup.paths.db or "miniflux-db" }}:/var/lib/postgresql/data
     healthcheck:

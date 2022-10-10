@@ -43,6 +43,8 @@ miniflux:
         image: docker.io/library/postgres:latest
   install:
     rootless: true
+    autoupdate: true
+    autoupdate_service: false
     remove_all_data_for_sure: false
   config:
     admin_password: correct horse battery staple
