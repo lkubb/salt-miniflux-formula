@@ -15,5 +15,6 @@ Miniflux environment files are absent:
     - names:
       - {{ miniflux.lookup.paths.config_miniflux }}
       - {{ miniflux.lookup.paths.config_postgres }}
+      - {{ miniflux.lookup.paths.base | path_join(".saltcache.yml") }}
     - require:
       - sls: {{ sls_service_clean }}
