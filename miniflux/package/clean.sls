@@ -1,8 +1,14 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{%- set tplroot = tpldir.split('/')[0] %}
-{%- set sls_config_clean = tplroot ~ '.config.clean' %}
+{#-
+    Removes the miniflux, postgres containers
+    and the corresponding user account and service units.
+    Has a depency on `miniflux.config.clean`_.
+    If ``remove_all_data_for_sure`` was set, also removes all data.
+#}
+
+{%- set tplroot = tpldir.split("/")[0] %}
+{%- set sls_config_clean = tplroot ~ ".config.clean" %}
 {%- from tplroot ~ "/map.jinja" import mapdata as miniflux with context %}
 
 include:
@@ -40,6 +46,25 @@ Miniflux compose file is absent:
     - name: {{ miniflux.lookup.paths.compose }}
     - require:
       - Miniflux is absent
+
+{%- if miniflux.install.podman_api %}
+
+Miniflux podman API is unavailable:
+  compose.systemd_service_dead:
+    - name: podman
+    - user: {{ miniflux.lookup.user.name }}
+    - onlyif:
+      - fun: user.info
+        name: {{ miniflux.lookup.user.name }}
+
+Miniflux podman API is disabled:
+  compose.systemd_service_disabled:
+    - name: podman
+    - user: {{ miniflux.lookup.user.name }}
+    - onlyif:
+      - fun: user.info
+        name: {{ miniflux.lookup.user.name }}
+{%- endif %}
 
 Miniflux user session is not initialized at boot:
   compose.lingering_managed:

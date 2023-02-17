@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{%- set tplroot = tpldir.split('/')[0] %}
+{%- set tplroot = tpldir.split("/")[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as miniflux with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
 
@@ -35,11 +34,28 @@ Miniflux paths are present:
     - require:
       - user: {{ miniflux.lookup.user.name }}
 
+{%- if miniflux.install.podman_api %}
+
+Miniflux podman API is enabled:
+  compose.systemd_service_enabled:
+    - name: podman
+    - user: {{ miniflux.lookup.user.name }}
+    - require:
+      - Miniflux user session is initialized at boot
+
+Miniflux podman API is available:
+  compose.systemd_service_running:
+    - name: podman
+    - user: {{ miniflux.lookup.user.name }}
+    - require:
+      - Miniflux user session is initialized at boot
+{%- endif %}
+
 Miniflux compose file is managed:
   file.managed:
     - name: {{ miniflux.lookup.paths.compose }}
-    - source: {{ files_switch(['docker-compose.yml', 'docker-compose.yml.j2'],
-                              lookup='Miniflux compose file is present'
+    - source: {{ files_switch(["docker-compose.yml", "docker-compose.yml.j2"],
+                              lookup="Miniflux compose file is present"
                  )
               }}
     - mode: '0644'
