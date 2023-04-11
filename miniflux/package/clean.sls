@@ -51,7 +51,7 @@ Miniflux compose file is absent:
 
 Miniflux podman API is unavailable:
   compose.systemd_service_dead:
-    - name: podman
+    - name: podman.socket
     - user: {{ miniflux.lookup.user.name }}
     - onlyif:
       - fun: user.info
@@ -59,7 +59,7 @@ Miniflux podman API is unavailable:
 
 Miniflux podman API is disabled:
   compose.systemd_service_disabled:
-    - name: podman
+    - name: podman.socket
     - user: {{ miniflux.lookup.user.name }}
     - onlyif:
       - fun: user.info
