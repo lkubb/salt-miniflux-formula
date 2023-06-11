@@ -2,7 +2,7 @@
 
 {%- set tplroot = tpldir.split("/")[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as miniflux with context %}
-{%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
+{%- from tplroot ~ "/libtofsstack.jinja" import files_switch with context %}
 
 Miniflux user account is present:
   user.present:
@@ -54,14 +54,16 @@ Miniflux podman API is available:
 Miniflux compose file is managed:
   file.managed:
     - name: {{ miniflux.lookup.paths.compose }}
-    - source: {{ files_switch(["docker-compose.yml", "docker-compose.yml.j2"],
-                              lookup="Miniflux compose file is present"
+    - source: {{ files_switch(
+                    ["docker-compose.yml", "docker-compose.yml.j2"],
+                    config=miniflux,
+                    lookup="Miniflux compose file is present",
                  )
               }}
     - mode: '0644'
     - user: root
     - group: {{ miniflux.lookup.rootgroup }}
-    - makedirs: True
+    - makedirs: true
     - template: jinja
     - makedirs: true
     - context:
