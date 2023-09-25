@@ -34,7 +34,7 @@ Miniflux environment files are managed:
     - template: jinja
     - require:
       - user: {{ miniflux.lookup.user.name }}
-    - watch_in:
+    - require_in:
       - Miniflux is installed
     - context:
         miniflux: {{ miniflux | json }}

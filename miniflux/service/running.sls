@@ -34,3 +34,4 @@ Miniflux service is running:
 {%- endif %}
     - watch:
       - Miniflux is installed
+      - sls: {{ sls_config_file }}
