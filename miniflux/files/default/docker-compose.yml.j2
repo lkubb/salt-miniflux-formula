@@ -28,7 +28,7 @@ services:
       - io.containers.autoupdate=registry
 {%- endif %}
     volumes:
-      - {{ miniflux.lookup.paths.db or "miniflux-db" }}:/var/lib/postgresql/data
+      - {{ miniflux.lookup.paths.db or "miniflux-db" }}:/var/lib/postgresql/data:Z
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "{{ miniflux.config.database.user }}"]
       interval: 10s
